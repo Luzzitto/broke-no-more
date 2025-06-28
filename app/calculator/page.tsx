@@ -1,7 +1,9 @@
 "use client";
 
+import ModeToggle from "@/components/mode-toggle";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -40,6 +42,9 @@ const Calculator = () => {
             achievable based on your inputs. Enter your details to find out
             whether reaching your target is possible or not.
           </CardDescription>
+          <CardAction>
+            <ModeToggle />
+          </CardAction>
         </CardHeader>
         <CardContent>
           <Card className="w-full lg:max-w-2xl">
@@ -49,7 +54,6 @@ const Calculator = () => {
                 <Input
                   type="number"
                   value={targetAmount}
-                  min={0}
                   onChange={(e) => setTargetAmount(Number(e.target.value))}
                 />
               </Label>
@@ -58,7 +62,6 @@ const Calculator = () => {
                 <Input
                   type="number"
                   value={monthlyIncome}
-                  min={0}
                   onChange={(e) => setMonthlyIncome(Number(e.target.value))}
                 />
               </Label>
