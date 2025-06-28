@@ -1,103 +1,111 @@
-import Image from "next/image";
+import Calendar from "@/components/calendar/main";
+import Expense from "@/components/expense/main";
+import ModeToggle from "@/components/mode-toggle";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@/components/ui/select";
+import { SelectValue } from "@radix-ui/react-select";
+import React from "react";
 
-export default function Home() {
+const App = () => {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+    <div className="min-h-screen p-8">
+      <Card className="max-w-6xl mx-auto">
+        <CardHeader>
+          <CardTitle>Budgeting Dashboard</CardTitle>
+          <CardDescription>
+            Track your expenses, set budgets, and gain insights into your
+            financial habits with this simple budgeting dashboard.
+          </CardDescription>
+          <CardAction>
+            <ModeToggle />
+          </CardAction>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4">
+          <div className="flex flex-row gap-4">
+            <Card className="basis-1/3">
+              <CardHeader>
+                <CardTitle>Initial Configuration</CardTitle>
+                <CardDescription>
+                  Set up your starting balance, preferred currency, and monthly
+                  budget to begin tracking your finances.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-4">
+                <Label className="block">
+                  <span>Initial Bank Balance</span>
+                  <Input type="number" className="mt-1 block" />
+                </Label>
+                <Label className="block">
+                  <span>Income Amount</span>
+                  <Input type="number" className="mt-1 block" />
+                </Label>
+                <Label className="block">
+                  <span>Income Type</span>
+                  <Select>
+                    <SelectTrigger className="w-full mt-1">
+                      <SelectValue placeholder="Select income type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="weekly">Weekly</SelectItem>
+                      <SelectItem value="bi-weekly">Bi-Weekly</SelectItem>
+                      <SelectItem value="monthly">Monthly</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </Label>
+                <Button>Update</Button>
+              </CardContent>
+            </Card>
+            <Card className="basis-2/3">
+              <CardHeader>
+                <CardTitle>Overview</CardTitle>
+                <CardDescription>
+                  View a summary of your current balance, recent transactions,
+                  and budget status at a glance.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Calendar</CardTitle>
+              <CardDescription>
+                Visualize your income and expenses throughout the month. Use the
+                calendar to track upcoming bills, paydays, and financial events.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Calendar />
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Savings Goal</CardTitle>
+              <CardDescription>
+                Set and track your savings goals. Monitor your progress and stay
+                motivated to reach your financial targets.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+          <Expense />
+        </CardContent>
+      </Card>
     </div>
   );
-}
+};
+
+export default App;
