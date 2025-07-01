@@ -12,29 +12,45 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 
 const Calculator = () => {
+  const [targetAmount, setTargetAmount] = useState<number>(0);
+  const [monthlyIncome, setMonthlyIncome] = useState<number>(0);
   const [sliderValue, setSliderValue] = useState<number>(0.1);
-  const [targetAmount, setTargetAmount] = useState<number | undefined>();
-  const [monthlyIncome, setMonthlyIncome] = useState<number | undefined>();
 
-  // Calculate values safely
-  const monthlySavings =
-    typeof monthlyIncome === "number" && !isNaN(monthlyIncome)
-      ? monthlyIncome * sliderValue
-      : 0;
+  // Calculate monthly savings
+  const monthlySavings = useMemo(() => {
+    return monthlyIncome > 0 ? monthlyIncome * sliderValue : 0;
+  }, [monthlyIncome, sliderValue]);
 
-  const monthsNeeded =
-    monthlySavings > 0 && typeof targetAmount === "number" && targetAmount > 0
+  // Calculate months needed
+  const monthsNeeded = useMemo(() => {
+    return monthlySavings > 0 && targetAmount > 0
       ? Math.ceil(targetAmount / monthlySavings)
       : 0;
+  }, [targetAmount, monthlySavings]);
 
+  // Calculate years and months
   const years = Math.floor(monthsNeeded / 12);
   const months = monthsNeeded % 12;
 
+  const handleTargetAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTargetAmount(Number(e.target.value));
+  };
+
+  const handleMonthlyIncomeChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setMonthlyIncome(Number(e.target.value));
+  };
+
+  const handleSliderChange = (value: number[]) => {
+    setSliderValue(value[0]);
+  };
+
   return (
-    <div className="min-h-screen p-8 ">
+    <div className="min-h-screen p-8">
       <Card className="max-w-6xl mx-auto">
         <CardHeader>
           <CardTitle>Savings Calculator</CardTitle>
@@ -54,16 +70,18 @@ const Calculator = () => {
                 <span>Target Amount</span>
                 <Input
                   type="number"
-                  value={targetAmount}
-                  onChange={(e) => setTargetAmount(Number(e.target.value))}
+                  value={targetAmount === 0 ? "" : targetAmount}
+                  min={0}
+                  onChange={handleTargetAmountChange}
                 />
               </Label>
               <Label className="flex flex-col items-start space-y-1">
                 <span>Monthly Income</span>
                 <Input
                   type="number"
-                  value={monthlyIncome}
-                  onChange={(e) => setMonthlyIncome(Number(e.target.value))}
+                  value={monthlyIncome === 0 ? "" : monthlyIncome}
+                  min={0}
+                  onChange={handleMonthlyIncomeChange}
                 />
               </Label>
               <Label className="flex flex-col items-start space-y-1">
@@ -75,38 +93,30 @@ const Calculator = () => {
                   max={1}
                   min={0}
                   step={0.05}
-                  onValueChange={([val]) => setSliderValue(val)}
+                  onValueChange={handleSliderChange}
                 />
               </Label>
               <div className="border p-8">
                 <h1>
-                  {monthlySavings > 0 &&
-                  typeof targetAmount === "number" &&
-                  targetAmount > 0 ? (
-                    <>
-                      <div className="grid grid-cols-2">
-                        <p>Months Needed: </p>
-                        <span>
-                          {monthsNeeded > 12
-                            ? `${years} year${years > 1 ? "s" : ""}${
-                                months > 0
-                                  ? ` and ${months} month${
-                                      months > 1 ? "s" : ""
-                                    }`
-                                  : ""
-                              }`
-                            : `${monthsNeeded} months`}
-                        </span>
-                        <p>Savings Amount: </p>
-                        <span>
-                          $
-                          {typeof monthlyIncome === "number" &&
-                          !isNaN(monthlyIncome)
-                            ? (sliderValue * monthlyIncome).toFixed(2)
-                            : "0.00"}
-                        </span>
-                      </div>
-                    </>
+                  {monthlySavings > 0 && targetAmount > 0 ? (
+                    <div className="grid grid-cols-2">
+                      <p>Months Needed: </p>
+                      <span>
+                        {monthsNeeded > 12
+                          ? `${years} year${years !== 1 ? "s" : ""}${
+                              months > 0
+                                ? ` and ${months} month${
+                                    months !== 1 ? "s" : ""
+                                  }`
+                                : ""
+                            }`
+                          : `${monthsNeeded} month${
+                              monthsNeeded !== 1 ? "s" : ""
+                            }`}
+                      </span>
+                      <p>Savings Amount: </p>
+                      <span>${monthlySavings.toFixed(2)}</span>
+                    </div>
                   ) : (
                     <>Enter values to calculate.</>
                   )}

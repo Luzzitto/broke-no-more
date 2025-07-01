@@ -12,10 +12,10 @@ import { Label } from "@/components/ui/label";
 import React, { useState } from "react";
 
 const HowMuch = () => {
-  const [perDay, setPerDay] = useState<number | undefined>(0);
-  const [perWeek, setPerWeek] = useState<number | undefined>(0);
-  const [perMonth, setPerMonth] = useState<number | undefined>(0);
-  const [perYear, setPerYear] = useState<number | undefined>(0);
+  const [perDay, setPerDay] = useState<number>(0);
+  const [perWeek, setPerWeek] = useState<number>(0);
+  const [perMonth, setPerMonth] = useState<number>(0);
+  const [perYear, setPerYear] = useState<number>(0);
 
   type Period = "day" | "week" | "month" | "year";
 
