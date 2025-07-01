@@ -16,19 +16,20 @@ import React, { useState } from "react";
 
 const Calculator = () => {
   const [sliderValue, setSliderValue] = useState<number>(0.1);
-  const [targetAmount, setTargetAmount] = useState<number>(0);
-  const [monthlyIncome, setMonthlyIncome] = useState<number>(0);
+  const [targetAmount, setTargetAmount] = useState<number | undefined>();
+  const [monthlyIncome, setMonthlyIncome] = useState<number | undefined>();
 
-  // Calculate the monthly savings based on percentage
-  const monthlySavings = monthlyIncome * sliderValue;
+  // Calculate values safely
+  const monthlySavings =
+    typeof monthlyIncome === "number" && !isNaN(monthlyIncome)
+      ? monthlyIncome * sliderValue
+      : 0;
 
-  // Calculate months needed to reach the target
   const monthsNeeded =
-    monthlySavings > 0 && targetAmount > 0
+    monthlySavings > 0 && typeof targetAmount === "number" && targetAmount > 0
       ? Math.ceil(targetAmount / monthlySavings)
       : 0;
 
-  // Calculate years and months if monthsNeeded > 12
   const years = Math.floor(monthsNeeded / 12);
   const months = monthsNeeded % 12;
 
@@ -79,7 +80,9 @@ const Calculator = () => {
               </Label>
               <div className="border p-8">
                 <h1>
-                  {monthlySavings > 0 && targetAmount > 0 ? (
+                  {monthlySavings > 0 &&
+                  typeof targetAmount === "number" &&
+                  targetAmount > 0 ? (
                     <>
                       <div className="grid grid-cols-2">
                         <p>Months Needed: </p>
@@ -95,7 +98,13 @@ const Calculator = () => {
                             : `${monthsNeeded} months`}
                         </span>
                         <p>Savings Amount: </p>
-                        <span>${(sliderValue * monthlyIncome).toFixed(2)}</span>
+                        <span>
+                          $
+                          {typeof monthlyIncome === "number" &&
+                          !isNaN(monthlyIncome)
+                            ? (sliderValue * monthlyIncome).toFixed(2)
+                            : "0.00"}
+                        </span>
                       </div>
                     </>
                   ) : (
